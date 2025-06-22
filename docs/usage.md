@@ -161,11 +161,11 @@ project/
 ├── public/
 │   └── locales/                 # 번역 파일
 │       ├── ko-KR/
-│       │   └── common.json
+│       │   └── <namespace>.json
 │       ├── en-US/
-│       │   └── common.json
+│       │   └── <namespace>.json
 │       └── ja-JP/
-│           └── common.json
+│           └── <namespace>.json
 └── src/
     └── components/              # React 컴포넌트
 ```

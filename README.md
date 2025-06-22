@@ -135,11 +135,11 @@ npx gs-i18n
 public/
   └── locales/
       ├── ko-KR/
-      │   └── common.json
+      │   └── <namespace>.json
       ├── en-US/
-      │   └── common.json
+      │   └── <namespace>.json
       └── ja-JP/
-          └── common.json
+          └── <namespace>.json
 ```
 
 ### 다국어 코드 시트에 반영하기 (Upload)
@@ -175,10 +175,10 @@ module.exports = {
   options: {
     defaultLng: "ko-KR",
     lngs: ["ko-KR", "en-US", "ja-JP"],
-    ns: ["common"],
+    ns: ["common"], // 여러 네임스페이스를 배열로 지정할 수 있어요
     resource: {
-      loadPath: "./public/locales/{{lng}}/common.json",
-      savePath: "./public/locales/{{lng}}/common.json",
+      loadPath: "./public/locales/{{lng}}/{{ns}}.json",
+      savePath: "./public/locales/{{lng}}/{{ns}}.json",
     },
     // ... 기타 설정
   },
@@ -205,11 +205,11 @@ project/
 ├── public/
 │   └── locales/                 # 번역 파일
 │       ├── ko-KR/
-│       │   └── common.json
+│       │   └── <namespace>.json
 │       ├── en-US/
-│       │   └── common.json
+│       │   └── <namespace>.json
 │       └── ja-JP/
-│           └── common.json
+│           └── <namespace>.json
 └── src/
     └── components/              # React 컴포넌트
 ```

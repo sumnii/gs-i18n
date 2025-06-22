@@ -46,9 +46,9 @@ npx gs-i18n
 
 ```
 public/locales/
-├── ko-KR/common.json
-├── en-US/common.json
-└── ja-JP/common.json
+├── ko-KR/<namespace>.json
+├── en-US/<namespace>.json
+└── ja-JP/<namespace>.json
 ```
 
 ### 2. 번역 키 매핑

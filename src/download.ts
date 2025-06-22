@@ -74,26 +74,36 @@ const makeLanguagesMap = (
 
 export async function updateJsonFromSheet(): Promise<void> {
 	try {
-		const { localePath, namespace } = getScannerInfo();
+                const { localePath, namespaces } = getScannerInfo();
 
 		const doc = await loadSpreadsheetInfo();
 		const languagesMap = await fetchTranslationsFromSheetToJson(doc);
 
 		const languageDirs = await fs.promises.readdir(localePath);
 
-		await fx(languageDirs)
-			.filter((language) => languagesMap[language])
-			.toAsync()
-			.each(async (language) => {
-				const localeJsonFilePath = path.join(
-					localePath,
-					language,
-					`${namespace}.json`,
-				);
+                await fx(languageDirs)
+                        .filter((language) => languagesMap[language])
+                        .toAsync()
+                        .each(async (language) => {
+                                for (const namespace of namespaces) {
+                                        const localeJsonFilePath = path.join(
+                                                localePath,
+                                                language,
+                                                `${namespace}.json`,
+                                        );
 
-				const jsonString = JSON.stringify(languagesMap[language], null, 2);
-				fs.promises.writeFile(localeJsonFilePath, jsonString, "utf-8");
-			});
+                                        const jsonString = JSON.stringify(
+                                                languagesMap[language],
+                                                null,
+                                                2,
+                                        );
+                                        fs.promises.writeFile(
+                                                localeJsonFilePath,
+                                                jsonString,
+                                                "utf-8",
+                                        );
+                                }
+                        });
 	} catch (error) {
 		throw new Error(`Download Error: ${error}`);
 	}

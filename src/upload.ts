@@ -141,31 +141,40 @@ function gatherKeyMap(
 
 export async function updateSheetFromJson(): Promise<void> {
 	try {
-		const { localePath, namespace } = getScannerInfo();
-		const translatedKeyMap: TranslationKeyMap = {};
+                const { localePath, namespaces } = getScannerInfo();
+                const translatedKeyMap: TranslationKeyMap = {};
 
 		const doc = await loadSpreadsheetInfo();
 		const languageFolders = await fs.promises.readdir(localePath);
 
-		for (const language of languageFolders) {
-			const localeJsonFilePath = path.join(
-				localePath,
-				language,
-				`${namespace}.json`,
-			);
+                for (const language of languageFolders) {
+                        for (const namespace of namespaces) {
+                                const localeJsonFilePath = path.join(
+                                        localePath,
+                                        language,
+                                        `${namespace}.json`,
+                                );
 
-			try {
-				const fileContent = await fs.promises.readFile(
-					localeJsonFilePath,
-					"utf8",
-				);
-				const json = JSON.parse(fileContent);
+                                try {
+                                        const fileContent = await fs.promises.readFile(
+                                                localeJsonFilePath,
+                                                "utf8",
+                                        );
+                                        const json = JSON.parse(fileContent);
 
-				gatherKeyMap(translatedKeyMap, language, json);
-			} catch (error) {
-				throw new Error(`Upload Content Error: ${error}`);
-			}
-		}
+                                        gatherKeyMap(translatedKeyMap, language, json);
+                                } catch (error) {
+                                        if (
+                                                (error as NodeJS.ErrnoException).code ===
+                                                "ENOENT"
+                                        ) {
+                                                continue;
+                                        }
+
+                                        throw new Error(`Upload Content Error: ${error}`);
+                                }
+                        }
+                }
 
 		await updateTranslationsFromKeyMapToSheet(doc, translatedKeyMap);
 	} catch (error) {

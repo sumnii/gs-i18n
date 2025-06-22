@@ -132,20 +132,20 @@ export function getScannerInfo() {
 	const configFilePath = path.join(cwd, "i18next-scanner.config.cjs");
 	const config = require(configFilePath);
 
-	const loadPath: string = config.options.resource.loadPath;
-	const localePath: string = loadPath.replace("/{{lng}}/common.json", "");
-	const namespace: string = config.options.ns[0];
-	const languages: string[] = config.options.lngs;
-	const columnKeyToHeader: Record<string, string> =
-		config.options.metadata.columnKeyToHeader;
-	const headerValues: string[] = Object.values(columnKeyToHeader);
+        const loadPath: string = config.options.resource.loadPath;
+        const localePath: string = loadPath.replace(/\/\{\{lng\}\}\/.*$/, "");
+        const namespaces: string[] = config.options.ns;
+        const languages: string[] = config.options.lngs;
+        const columnKeyToHeader: Record<string, string> =
+                config.options.metadata.columnKeyToHeader;
+        const headerValues: string[] = Object.values(columnKeyToHeader);
 
-	return {
-		loadPath,
-		localePath,
-		namespace,
-		languages,
-		columnKeyToHeader,
-		headerValues,
-	};
+        return {
+                loadPath,
+                localePath,
+                namespaces,
+                languages,
+                columnKeyToHeader,
+                headerValues,
+        };
 }

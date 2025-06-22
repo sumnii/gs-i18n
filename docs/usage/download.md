@@ -72,9 +72,9 @@ Google Sheets의 번역 시트에서 데이터를 읽어요.
 
 ```
 public/locales/
-├── ko-KR/common.json
-├── en-US/common.json
-└── ja-JP/common.json
+├── ko-KR/<namespace>.json
+├── en-US/<namespace>.json
+└── ja-JP/<namespace>.json
 ```
 
 ## 기술적 세부사항
