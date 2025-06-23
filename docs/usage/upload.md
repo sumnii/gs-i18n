@@ -46,9 +46,9 @@ npx gs-i18n
 
 ```
 public/locales/
-├── ko-KR/common.json
-├── en-US/common.json
-└── ja-JP/common.json
+├── ko-KR/<namespace>.json
+├── en-US/<namespace>.json
+└── ja-JP/<namespace>.json
 ```
 
 ### 2. 번역 키 매핑
@@ -73,6 +73,8 @@ Google Sheets에 다음과 같은 구조로 데이터가 추가되어요.
 | 키          | ko-KR       | en-US  | ja-JP       |
 | ----------- | ----------- | ------ | ----------- |
 | 안녕하세요. | 안녕하세요. | hello. | こんにちは. |
+
+네임스페이스별로 시트가 분리되어 작성돼요.
 
 ## 주요 특징
 

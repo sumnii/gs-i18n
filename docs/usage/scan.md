@@ -63,14 +63,14 @@ function MyComponent() {
 public/
 └── locales/
     ├── ko-KR/
-    │   └── common.json
+    │   └── <namespace>.json
     ├── en-US/
-    │   └── common.json
+    │   └── <namespace>.json
     └── ja-JP/
-        └── common.json
+        └── <namespace>.json
 ```
 
-### 생성되는 JSON 예시 (ko-KR/common.json)
+### 생성되는 JSON 예시 (ko-KR/<namespace>.json)
 
 ```json
 {

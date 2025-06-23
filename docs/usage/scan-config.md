@@ -74,14 +74,14 @@ module.exports = {
   options: {
     defaultLng: "ko-KR",
     lngs: ["ko-KR", "en-US", "ja-JP"],
-    ns: ["common"],
+    ns: ["common"], // 여러 네임스페이스를 배열로 지정
     func: {
       list: ["i18next.t", "i18n.t", "t"],
       extensions: [".ts", ".tsx"],
     },
     resource: {
-      loadPath: "./public/locales/{{lng}}/common.json",
-      savePath: "./public/locales/{{lng}}/common.json",
+      loadPath: "./public/locales/{{lng}}/{{ns}}.json",
+      savePath: "./public/locales/{{lng}}/{{ns}}.json",
     },
     defaultValue(lng, ns, key) {
       const keyAsDefaultValue = ["ko-KR"];
@@ -134,8 +134,8 @@ lngs: ["ko-KR", "en-US", "ja-JP"]
 
 ```javascript
 resource: {
-  loadPath: "./public/locales/{{lng}}/common.json",
-  savePath: "./public/locales/{{lng}}/common.json",
+  loadPath: "./public/locales/{{lng}}/{{ns}}.json",
+  savePath: "./public/locales/{{lng}}/{{ns}}.json",
 }
 ```
 

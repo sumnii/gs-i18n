@@ -135,11 +135,11 @@ npx gs-i18n
 public/
   └── locales/
       ├── ko-KR/
-      │   └── common.json
+      │   └── <namespace>.json
       ├── en-US/
-      │   └── common.json
+      │   └── <namespace>.json
       └── ja-JP/
-          └── common.json
+          └── <namespace>.json
 ```
 
 ### 다국어 코드 시트에 반영하기 (Upload)
@@ -165,6 +165,8 @@ Google Sheets의 번역 내용을 로컬 JSON 파일에 다운로드해요.
 | 로그아웃    | 로그아웃    | Logout    | ログアウト |
 | 사용자 이름 | 사용자 이름 | User Name | ユーザー名 |
 
+네임스페이스마다 동일한 형식의 시트가 별도로 생성되어 관리됩니다.
+
 ## 설정 예시
 
 ### i18next-scanner.config.cjs
@@ -175,10 +177,10 @@ module.exports = {
   options: {
     defaultLng: "ko-KR",
     lngs: ["ko-KR", "en-US", "ja-JP"],
-    ns: ["common"],
+    ns: ["common"], // 여러 네임스페이스를 배열로 지정할 수 있어요
     resource: {
-      loadPath: "./public/locales/{{lng}}/common.json",
-      savePath: "./public/locales/{{lng}}/common.json",
+      loadPath: "./public/locales/{{lng}}/{{ns}}.json",
+      savePath: "./public/locales/{{lng}}/{{ns}}.json",
     },
     // ... 기타 설정
   },
@@ -205,11 +207,11 @@ project/
 ├── public/
 │   └── locales/                 # 번역 파일
 │       ├── ko-KR/
-│       │   └── common.json
+│       │   └── <namespace>.json
 │       ├── en-US/
-│       │   └── common.json
+│       │   └── <namespace>.json
 │       └── ja-JP/
-│           └── common.json
+│           └── <namespace>.json
 └── src/
     └── components/              # React 컴포넌트
 ```

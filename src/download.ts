@@ -4,14 +4,10 @@ import { each, fx, reduce } from "@fxts/core";
 import type {
 	GoogleSpreadsheet,
 	GoogleSpreadsheetRow,
+	GoogleSpreadsheetWorksheet,
 } from "google-spreadsheet";
 import { loadSpreadsheetInfo } from "./googleSheets";
-import {
-	NOT_AVAILABLE_CELL,
-	addNewSheet,
-	getScannerInfo,
-	getSpreadsheetSheetId,
-} from "./libs";
+import { NOT_AVAILABLE_CELL, getOrCreateSheet, getScannerInfo } from "./libs";
 
 type LanguageMap = {
 	[language: string]: {
@@ -26,18 +22,9 @@ type LanguageMap = {
  */
 
 async function fetchTranslationsFromSheetToJson(
-	doc: GoogleSpreadsheet,
+	sheet: GoogleSpreadsheetWorksheet,
 ): Promise<LanguageMap> {
-	if (getSpreadsheetSheetId() === undefined) {
-		throw new Error("SHEET_ID is not defined");
-	}
-
-	const title = "번역 시트";
 	const { headerValues } = getScannerInfo();
-
-	const sheet =
-		doc.sheetsById[getSpreadsheetSheetId()] ??
-		(await addNewSheet(doc, title, getSpreadsheetSheetId(), headerValues));
 
 	await sheet.setHeaderRow(headerValues);
 	const rows = await sheet.getRows();
@@ -74,26 +61,30 @@ const makeLanguagesMap = (
 
 export async function updateJsonFromSheet(): Promise<void> {
 	try {
-		const { localePath, namespace } = getScannerInfo();
+		const { localePath, namespaces, headerValues } = getScannerInfo();
 
 		const doc = await loadSpreadsheetInfo();
-		const languagesMap = await fetchTranslationsFromSheetToJson(doc);
-
 		const languageDirs = await fs.promises.readdir(localePath);
 
-		await fx(languageDirs)
-			.filter((language) => languagesMap[language])
-			.toAsync()
-			.each(async (language) => {
-				const localeJsonFilePath = path.join(
-					localePath,
-					language,
-					`${namespace}.json`,
-				);
+		for (const namespace of namespaces) {
+			const sheet = await getOrCreateSheet(doc, namespace, headerValues);
 
-				const jsonString = JSON.stringify(languagesMap[language], null, 2);
-				fs.promises.writeFile(localeJsonFilePath, jsonString, "utf-8");
-			});
+			const languagesMap = await fetchTranslationsFromSheetToJson(sheet);
+
+			await fx(languageDirs)
+				.filter((language) => languagesMap[language])
+				.toAsync()
+				.each(async (language) => {
+					const localeJsonFilePath = path.join(
+						localePath,
+						language,
+						`${namespace}.json`,
+					);
+
+					const jsonString = JSON.stringify(languagesMap[language], null, 2);
+					fs.promises.writeFile(localeJsonFilePath, jsonString, "utf-8");
+				});
+		}
 	} catch (error) {
 		throw new Error(`Download Error: ${error}`);
 	}

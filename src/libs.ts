@@ -115,8 +115,8 @@ export async function runCommand(command: string) {
 export async function addNewSheet(
 	doc: GoogleSpreadsheet,
 	title: string,
-	sheetId: number,
 	headerValues: string[],
+	sheetId?: number,
 ): Promise<GoogleSpreadsheetWorksheet> {
 	const sheet = await doc.addSheet({
 		sheetId,
@@ -127,14 +127,30 @@ export async function addNewSheet(
 	return sheet;
 }
 
+export async function getOrCreateSheet(
+	doc: GoogleSpreadsheet,
+	title: string,
+	headerValues: string[],
+	sheetId?: number,
+): Promise<GoogleSpreadsheetWorksheet> {
+	const existing = doc.sheetsByTitle[title];
+	if (existing) {
+		await existing.setHeaderRow(headerValues);
+		return existing;
+	}
+
+	const sheet = await addNewSheet(doc, title, headerValues, sheetId);
+	return sheet;
+}
+
 export function getScannerInfo() {
 	const cwd = process.cwd();
 	const configFilePath = path.join(cwd, "i18next-scanner.config.cjs");
 	const config = require(configFilePath);
 
 	const loadPath: string = config.options.resource.loadPath;
-	const localePath: string = loadPath.replace("/{{lng}}/common.json", "");
-	const namespace: string = config.options.ns[0];
+	const localePath: string = loadPath.replace(/\/\{\{lng\}\}\/.*$/, "");
+	const namespaces: string[] = config.options.ns;
 	const languages: string[] = config.options.lngs;
 	const columnKeyToHeader: Record<string, string> =
 		config.options.metadata.columnKeyToHeader;
@@ -143,7 +159,7 @@ export function getScannerInfo() {
 	return {
 		loadPath,
 		localePath,
-		namespace,
+		namespaces,
 		languages,
 		columnKeyToHeader,
 		headerValues,

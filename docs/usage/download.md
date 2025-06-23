@@ -48,6 +48,8 @@ Google Sheets의 번역 시트에서 데이터를 읽어요.
 | ----------- | ----------- | ------ | ----------- |
 | 안녕하세요. | 안녕하세요. | hello. | こんにちは. |
 
+각 네임스페이스는 개별 시트로 관리돼요.
+
 ### 2. 데이터 변환
 
 스프레드시트 데이터를 언어별 JSON 구조로 변환해요.
@@ -72,9 +74,9 @@ Google Sheets의 번역 시트에서 데이터를 읽어요.
 
 ```
 public/locales/
-├── ko-KR/common.json
-├── en-US/common.json
-└── ja-JP/common.json
+├── ko-KR/<namespace>.json
+├── en-US/<namespace>.json
+└── ja-JP/<namespace>.json
 ```
 
 ## 기술적 세부사항
